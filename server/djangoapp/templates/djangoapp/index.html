@@ -14,7 +14,6 @@
 </head>
 
     <body>
-     This is the index page of your Django app!
     <!--Add a nav bar here -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Navbar</a>
@@ -34,9 +33,30 @@
               </li>
             </ul>
         </div>
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+            <li>
+                <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                <a class="btn btn-link" href="../logout">Logout</a>
+            </li>
+            {% else %}
+            <li>
+                <form class="form-inline" action="../login" method="post">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Username" name="username" >
+                        <input type="password" class="form-control" placeholder="Password" name="psw" >
+                        <button class="btn btn-primary" type="submit">Login</button>
+                        <a class="btn btn-link" href="../registration">Sign Up</a>
+                    </div>
+                </form>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
       </nav>
     <!--Add a dealer table here -->
-
+      Welcome to index page!
     </body>
 
 </html>
