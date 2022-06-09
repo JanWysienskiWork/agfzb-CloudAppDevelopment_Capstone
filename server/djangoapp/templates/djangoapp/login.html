@@ -41,7 +41,7 @@
         </li>
         {% else %}
         <li>
-            <form class="form-inline" action="../login" method="post">
+            <form class="form-inline" action="../login/" method="post">
                 {% csrf_token %}
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Username" name="username" >
@@ -57,7 +57,7 @@
   </nav>
 
     <!-- Stylize Login form -->
-    <form action="{% url 'login' %}" method="post">
+    <form action="../login/" method="post">
         {% csrf_token %}
         <div class="container"> <!--Style root div with .container class -->
             <h1>Login</h1>
