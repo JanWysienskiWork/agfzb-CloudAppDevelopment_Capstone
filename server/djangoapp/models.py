@@ -1,22 +1,35 @@
 from django.db import models
+from django.core import serializers
 from django.utils.timezone import now
+import uuid
+import json
 
 class CarMake(models.Model):
-    name = models.CharField(max_length=50, primary_key=True)
-    description = models.CharField(max_length=200)
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=30)
+    description = models.CharField(max_length=1000)
 
     def __str__(self):
-        return self.name
+        return "Name: " + self.name + "," + \
+               "Description: " + self.description
 
 class CarModel(models.Model):
-    name = models.CharField(max_length=50, primary_key=True)
-    id = models.CharField(max_length=2)
-    type = models.CharField(max_length=10)
-    year = models.DateField(null=True)
-    carmakes = models.ManyToManyField(CarMake)
-
+    id = models.AutoField(primary_key=True)
+    carMake = models.ForeignKey(CarMake, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30)
+    dealerid = models.IntegerField(default=0)
+    SEDAN = 'Sedan'
+    SUV ='SUV'
+    WAGON = 'WAGON'
+    CHOICES = [
+        (SEDAN, 'Sedan'),
+        (SUV, 'SUV'),
+        (WAGON, 'WAGON'),
+    ]
+    Type =models.CharField(max_length=30,choices=CHOICES)
+    Year=models.DateField(null=True)
     def __str__(self):
-        return self.name
+        return "Car name: " + self.name  
 
 class CarDealer:
     def __init__(self, address, city, full_name, id, lat, long, short_name, st, zip):
