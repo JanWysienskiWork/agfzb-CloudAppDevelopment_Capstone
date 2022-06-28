@@ -7,7 +7,6 @@ from .restapis import get_dealers_from_cf,get_dealer_reviews_from_cf,post_reques
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
-from dateutil.parser import parse
 from django.urls import reverse
 import logging
 import json
