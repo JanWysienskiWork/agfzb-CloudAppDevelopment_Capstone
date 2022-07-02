@@ -1,3 +1,4 @@
+import os
 import requests
 import json
 from .models import CarDealer, DealerReview
@@ -6,45 +7,26 @@ from requests.auth import HTTPBasicAuth
 # Get Request
 def get_request(url, **kwargs):
     try:
-        api_key = None
-        if 'api_key' in kwargs:
-            params = {
-                'text': kwargs['text'],
-                'version': '2021-03-25',
-                'features': 'sentiment',
-                'return_analyzed_text': True
-            }
-            api_key = kwargs['api_key']
-            response = requests.get(url, headers={'Content-Type':'application/json'}, params=params, auth=HTTPBasicAuth('apikey', api_key))
-        else:
-            response = requests.get(url, headers={'Content-Type':'application/json'}, params=kwargs)
-        status_code = response.status_code
-        if status_code == 200:
-            json_data = json.loads(response.text)
-            return json_data
-        else:
-            print('get_requestResponse Status Code = ', status_code)
-            return None
-    except Exception as e:
-        print('Error occurred', e)
-        return None
+        response = requests.get(url, params=kwargs, headers={'Content-Type': 'application/json'})
+    except:
+        # If any error occurs
+        print("Network exception occurred")
+    status_code = response.status_code
+    print("With status {} ".format(status_code))
+    json_data = json.loads(response.text)
+    return json_data
 
 # Post Request
 def post_request(url, json_payload, **kwargs):
     try:
-        headers = {  'Content-Type': 'application/json'}
-        response= requests.request("POST", url, headers=headers, data=json_payload)
-
-        status_code = response.status_code
-        if status_code == 200:
-            json_data = json.loads(response.text)
-            return json_data
-        else:
-            print('Response Status Code = ', status_code)
-            return None
-    except Exception as e:
-        print('Error occurred', e)
-        return None
+        response = requests.get(url, params=kwargs, headers={'Content-Type': 'application/json'})
+    except:
+        # If any error occurs
+        print("Network exception occurred")
+    status_code = response.status_code
+    print("With status {} ".format(status_code))
+    json_data = json.loads(response.text)
+    return json_data
 
 # Get Dealers - cf
 def get_dealers_from_cf(url, **kwargs):
@@ -54,7 +36,7 @@ def get_dealers_from_cf(url, **kwargs):
     if json_result:
         # Get the row list in JSON as dealers
 
-        dealers = json_result["entries"]
+        dealers = json_result["result"]
         # For each dealer object
         for dealer in dealers:
             # Create a CarDealer object with values in `doc` object
@@ -67,29 +49,20 @@ def get_dealers_from_cf(url, **kwargs):
     return results
 
 # Get Dealers' Review - cf
-def get_dealer_reviews_from_cf(url):
+def get_dealer_reviews_from_cf(dealer_id):
     results=[]
+    url = "https://e767a744.eu-gb.apigw.appdomain.cloud/api/api/review?dealership=" + str(dealer_id)
     # call get_request with a URL parameter
     json_result = get_request(url)
     if json_result:
-        reviews = json_result["review"]
-        for review in reviews:
-            try:
-                Sentiment=analyze_review_sentiments(review["review"])
-  
-            except:
-                Sentiment="neutral"
-     
-
-            if review["purchase"]==True:
-                review_obj = DealerReview(id=review["id"],dealership=review["dealership"],name=review["name"],purchase=review["purchase"],
-                review=review["review"],purchase_date=review["purchase_date"],car_make=review["car_make"],car_model=review["car_model"],
-                car_year=review["car_year"], sentiment=Sentiment)
-            else:
-                review_obj = DealerReview(id=review["id"],dealership=review["dealership"],name=review["name"],purchase=review["purchase"],
-                review=review["review"],purchase_date=review["review_time"],car_make="NONE",car_model="NONE",
-                car_year="NONE", sentiment=Sentiment)
+        reviews = json_result["result"]["docs"]
+        for rev in reviews:
+            review_obj = DealerReview(id=rev["id"], name=rev["name"], dealership=rev["dealership"],
+                               review=rev["review"], purchase=rev["purchase"], purchase_date=rev["purchase_date"], 
+                               car_make=rev["car_make"], car_model=rev["car_model"], car_year=rev["car_year"])
+            review_obj.sentiment = analyze_review_sentiments(review_obj.review)
             results.append(review_obj)
+
     return results
 
 # NLU

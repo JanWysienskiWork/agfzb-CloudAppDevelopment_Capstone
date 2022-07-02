@@ -74,7 +74,7 @@ def registration_request(request):
 
 # Get Dealerships
 def get_dealerships(request):
-    context ={}
+    context = {}
     if request.method == "GET":
         url = "https://e767a744.eu-gb.apigw.appdomain.cloud/api/api/dealership"
         dealerships = get_dealers_from_cf(url)
@@ -84,16 +84,11 @@ def get_dealerships(request):
 
 # Get Dealer Details
 def get_dealer_details(request, dealer_id):
-    context={}
-    if request.method == "GET":
-            url = "https://e767a744.eu-gb.apigw.appdomain.cloud/api/api/review"
-            url_dealer = "https://e767a744.eu-gb.apigw.appdomain.cloud/api/api/dealership"
-            dealerships = get_dealer_reviews_from_cf(str(url)+'?dealerId='+str(dealer_id))
-            dealer_name = get_dealers_from_cf(url_dealer)
-            context['review_list']=dealerships
-            context['dealer_id']=dealer_id
-            context['dealer']=dealer_name[dealer_id-1]
-            return render(request, 'djangoapp/dealer_details.html', context)
+    context = {}
+    reviews = get_dealer_reviews_from_cf(dealer_id)
+    context["dealer_id"] = dealer_id
+    context['review_list'] = reviews
+    return render(request, 'djangoapp/dealer_details.html', context)
 
 # Add Review
 def add_review(request, dealer_id):
