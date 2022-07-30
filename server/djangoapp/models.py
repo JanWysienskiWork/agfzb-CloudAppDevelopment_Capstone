@@ -47,7 +47,7 @@ class CarDealer:
         return self.full_name
 
 class DealerReview:
-    def __init__(self, dealership, name, purchase, review, purchase_date, car_make, car_model, car_year, sentiment, id):
+    def __init__(self, dealership, name, purchase, review, purchase_date, car_make, car_model, car_year, id, sentiment="dupa"):
         self.dealership = dealership
         self.name = name
         self.purchase = purchase
