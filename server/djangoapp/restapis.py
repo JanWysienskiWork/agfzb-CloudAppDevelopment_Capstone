@@ -20,14 +20,19 @@ def get_request(url, **kwargs):
 # Post Request
 def post_request(url, json_payload, **kwargs):
     try:
-        response = requests.get(url, params=kwargs, headers={'Content-Type': 'application/json'})
-    except:
-        # If any error occurs
-        print("Network exception occurred")
-    status_code = response.status_code
-    print("With status {} ".format(status_code))
-    json_data = json.loads(response.text)
-    return json_data
+        headers = {  'Content-Type': 'application/json'}
+        response= requests.request("POST", url, headers=headers, data=json_payload)
+
+        status_code = response.status_code
+        if status_code == 200:
+            json_data = json.loads(response.text)
+            return json_data
+        else:
+            print('Response Status Code = ', status_code)
+            return None
+    except Exception as e:
+        print('Error occurred', e)
+        return None
 
 # Get Dealers - cf
 def get_dealers_from_cf(url, **kwargs):

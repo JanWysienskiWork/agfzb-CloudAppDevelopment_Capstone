@@ -26,8 +26,8 @@ class CarModel(models.Model):
         (SUV, 'SUV'),
         (WAGON, 'WAGON'),
     ]
-    Type =models.CharField(max_length=30,choices=CHOICES)
-    Year=models.DateField(null=True)
+    Type = models.CharField(max_length=30,choices=CHOICES)
+    Year = models.DateField(null=True)
     def __str__(self):
         return "Car name: " + self.name  
 
