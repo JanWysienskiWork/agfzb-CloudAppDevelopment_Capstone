@@ -163,5 +163,5 @@ def add_review(request, dealer_id):
                 
                 post_request(url, review, dealerId=dealer_id)
 
-                return redirect('djangoapp:dealer_details', context)
+                return redirect('djangoapp:dealer_details', context) 
                 '''
