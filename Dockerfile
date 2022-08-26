@@ -5,7 +5,8 @@
 
     RUN apt-get update \
         && apt-get install -y netcat
-
+        && apt-get upgrade python3
+        
     ENV APP=/app
 
     # Change the workdir.
