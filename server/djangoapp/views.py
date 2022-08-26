@@ -10,6 +10,7 @@ from datetime import datetime
 from django.urls import reverse
 import logging
 import json
+import uuid
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -103,8 +104,7 @@ def add_review(request, dealer_id):
     elif request.method == 'POST':
         json_payload = {}
         dealer_reviews = get_dealer_reviews_from_cf(dealer_id)
-        max_id = max([review.id for review in dealer_reviews], default=100)
-        new_id = max_id + 1 if max_id >= 100 else max_id + 100
+        new_id = str(uuid.uuid4())
         date = datetime.now()
         date = date.strftime('%Y-%m-%d')
         print(request.POST)
@@ -127,6 +127,7 @@ def add_review(request, dealer_id):
             'CAR_MODEL': car_model,
             'CAR_YEAR': car_year,
         } 
+        print(json_payload)
         json_payload=json.dumps(json_payload)
         url = "https://e767a744.eu-gb.apigw.appdomain.cloud/api/api/review"
         post_request(url, json_payload)
