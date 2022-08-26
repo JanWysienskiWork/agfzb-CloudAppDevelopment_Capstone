@@ -6,6 +6,7 @@
     RUN apt-get update \
         && apt-get install -y netcat
         && apt-get upgrade python3
+        && pip install pillow
         
     ENV APP=/app
 
