@@ -6,8 +6,9 @@
     RUN apt-get update \
         && apt-get install -y netcat
         && apt-get upgrade python3
+        && apt-get upgrade pip
         && pip install pillow
-        
+
     ENV APP=/app
 
     # Change the workdir.
