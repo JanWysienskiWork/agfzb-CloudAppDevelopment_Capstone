@@ -1,5 +1,5 @@
 requests
 Django
 gunicorn==20.0.4
-Pillow==9.20
+Pillow==9.2.0
 ibm-watson
