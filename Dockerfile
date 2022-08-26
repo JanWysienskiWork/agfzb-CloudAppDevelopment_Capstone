@@ -7,7 +7,8 @@
         && apt-get install -y netcat
         && apt-get upgrade python3
         && apt-get upgrade pip
-        && pip install pillow
+        && pip -m uninstall pillow
+        && pip -m install pillow
 
     ENV APP=/app
 
