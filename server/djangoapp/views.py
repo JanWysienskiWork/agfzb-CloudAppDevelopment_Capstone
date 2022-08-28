@@ -36,7 +36,7 @@ def login_request(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return render(request, 'djangoapp/index.html', context)
+            return redirect('djangoapp:index')
         else:
             context['message'] = "Invalid username or password."
             return render(request, 'djangoapp/login.html', context)
@@ -48,7 +48,7 @@ def logout_request(request):
     context = {}
     print("Log out the user `{}`".format(request.user.username))
     logout(request)
-    return render(request, 'djangoapp/index.html', context)
+    return redirect('djangoapp:index')
 
 # Registration Request
 def registration_request(request):
@@ -107,14 +107,14 @@ def add_review(request, dealer_id):
         new_id = str(uuid.uuid4())
         date = datetime.now()
         date = date.strftime('%Y-%m-%d')
-        print(request.POST)
-        car = request.POST['car']
+        try:
+            car = request.POST['car']
+        except:
+            car = " - - "
         car = car.split("-")
         car_make = car[0]
         car_model = car[1]
         car_year = car[2]
-        print("purchase_date")
-        print(request.POST.get('purchase_date'))
         json_payload = {
             'ID': new_id,
             'NAME': "root",
@@ -127,42 +127,8 @@ def add_review(request, dealer_id):
             'CAR_MODEL': car_model,
             'CAR_YEAR': car_year,
         } 
-        print(json_payload)
         json_payload=json.dumps(json_payload)
         url = "https://e767a744.eu-gb.apigw.appdomain.cloud/api/api/review"
         post_request(url, json_payload)
         
         return HttpResponseRedirect(reverse(viewname='djangoapp:dealer_details', args=(str(dealer_id),)))
-'''
-def add_review(request, dealer_id):
-    context = {}
-    context["dealer_id"] = dealer_id
-    review = dict()
-    if request.method == "GET":
-        return render(request, 'djangoapp/add_review.html', context)
-
-    if request.method == "POST":
-            if request.user.is_authenticated:
-                review['review'] = {}
-                review['review']["time"] = datetime.utcnow().isoformat()
-                review['review']["dealership"] = dealer_id
-                review['review']["review"] = request.POST["review"]
-                review['review']["purchase"] = request.POST["purchase"]
-                review['review']['purchase_date'] = request.POST['purchase_date'] or "Nil"
-                review['review']["car_model"] = request.POST["car_model"] or "Nil"
-                review['review']["car_make"] = request.POST["car_make"] or "Nil"
-                review['review']["car_year"] = request.POST["car_year"] or "Nil"
-
-                userr = User.objects.get(username=request.user)
-                review['review']['id'] = userr.id
-                review['review']["name"] = userr.first_name + " " + userr.last_name
-
-                url = "https://e767a744.eu-gb.apigw.appdomain.cloud/api/api/review"
-                
-                #json_payload = {}
-                #json_payload['review'] = review
-                
-                post_request(url, review, dealerId=dealer_id)
-
-                return redirect('djangoapp:dealer_details', context) 
-                '''

@@ -75,7 +75,7 @@
           <div class="form-group row">
             <label for="car" class="col-form-label col-sm-4"><b>Select your car (model-make-year):</b></label>
             <div class="col-sm-6">
-              <select class="form-select" placeholder="car model" name="car" id="car" required>
+              <select class="form-select" placeholder="car model" name="car" id="car">
                 {% for car in cars %}
                 <option selected value="{{car.name}}-{{car.carMake.name}}-{{ car.Year }}">
                   {{car.name}}-{{car.carMake.name}}-{{ car.Year }}
