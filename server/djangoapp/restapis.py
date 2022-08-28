@@ -71,7 +71,7 @@ def get_dealer_reviews_from_cf(dealer_id):
                 review_obj = DealerReview(id="", name=rev["name"], dealership=rev["dealership"],
                                review=rev["review"], purchase=rev["purchase"], purchase_date="", 
                                car_make="", car_model="", car_year="")
-                review_obj.sentiment = analyze_review_sentiments(review_obj.review)
+            review_obj.sentiment = analyze_review_sentiments(review_obj.review)
             results.append(review_obj)
     return results
 
